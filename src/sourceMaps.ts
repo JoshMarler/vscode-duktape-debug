@@ -357,7 +357,6 @@ export class SourceMap {
         // - the source-map library expects forward slashes and their relative path logic
         //   (specifically the "normalize" function) gives incorrect results when passing in backslashes.
         // - paths starting with drive letters are not recognized as absolute by the source-map library
-
         sm.sourceRoot = this.toUrl(sm.sourceRoot, "");
 
         for (let i = 0; i < sm.sources.length; i++) {
@@ -394,14 +393,9 @@ export class SourceMap {
             path = path.replace(/\\/g, "/");
             path = path.replace(/^webpack\:\/\/\//, "");
 
-            // if path starts with a drive letter convert path to a file:/// url so that the source-map library can handle it
-            if (/^[a-zA-Z]\:\//.test(path)) {
-                path = "file:///" + path;
-            }
-
             // if path contains upper case drive letter convert to lower case
-            if (/^file\:\/\/\/[A-Z]\:\//.test(path)) {
-                const dl = path[8];
+            if (/[A-Z]\:\//.test(path)) {
+                const dl = path[0];
                 path = path.replace(dl, dl.toLowerCase());
             }
             return path;
